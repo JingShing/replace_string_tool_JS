@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String Replace Tool</title>
+    <style>
+        button {
+        background-color: black;
+        color: white;
+        padding: 5px 5px;
+        margin: 5px;
+        }
+        Textarea {
+        width: 500px;
+        height: 200px;
+        }
+    </style>
+</head>
+<div id="input-container">
+  </div>
+  <button id="add-btn">+</button>
+  <button id="replace-btn">Replace</button>
+  <p>original paragraph:</p>
+  <br>
+  <textarea id="input-text"></textarea>
+  <p>replaced paragraph:</p>
+  <br>
+  <textarea id="output-text"></textarea>
+  
+  <script>
+    // get elements
+    const addBtn = document.getElementById("add-btn");
+    const inputContainer = document.getElementById("input-container");
+    const replaceBtn = document.getElementById("replace-btn");
+    const inputText = document.getElementById("input-text");
+    const outputText = document.getElementById("output-text");
+  
+    // listener for add button
+    addBtn.addEventListener("click", () => {
+      // create input row
+      const newRow = document.createElement("div");
+      newRow.classList.add("input-row");
+  
+      // create input col 1
+      const newInput1 = document.createElement("input");
+      newInput1.type = "text";
+      newInput1.name = "input[]";
+      newInput1.id = "input1";
+      
+      // create input col 2
+      const newInput2 = document.createElement("input");
+      newInput2.type = "text";
+      newInput2.name = "input[]";
+      newInput2.id = "input2";
+  
+      const label1 = document.createElement("span");
+      label1.textContent = "a:";
+      const label2 = document.createElement("span");
+      label2.textContent = "  b:";
+
+      // create delete button
+      const removeBtn = document.createElement("button");
+      removeBtn.classList.add("remove-btn");
+      removeBtn.textContent = "x";
+  
+      // listen delete button
+      removeBtn.addEventListener("click", () => {
+        newRow.remove();
+      });
+  
+      // put input and delete button in input row
+      newRow.appendChild(label1);
+      newRow.appendChild(newInput1);
+      newRow.appendChild(label2);
+      newRow.appendChild(newInput2);
+      newRow.appendChild(removeBtn);
+  
+      // put input row into input container
+      inputContainer.appendChild(newRow);
+    });
+  
+    // listener for replace button
+    replaceBtn.addEventListener("click", () => {
+        const inputRows = document.getElementsByClassName("input-row");
+
+        let replacedText = inputText.value;
+        for (let i = 0; i < inputRows.length; i++) {
+        const input = inputRows[i].getElementsByTagName("input");
+        const findText = input[0].value;
+        const replaceText = input[1].value;
+        const regex = new RegExp(findText, 'g');
+        replacedText = replacedText.replace(regex, replaceText);
+      }
+  
+      outputText.value = replacedText;
+    });
+  </script>
+  
