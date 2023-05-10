@@ -1,0 +1,46 @@
+<div id="input-container">
+  <div class="input-row">
+    <!-- <input type="text" name="input[]" />
+    <button class="remove-btn">x</button> -->
+  </div>
+</div>
+<button id="add-btn">+</button>
+<script>
+// get element
+const addBtn = document.getElementById("add-btn");
+const inputContainer = document.getElementById("input-container");
+
+// listener + button
+addBtn.addEventListener("click", () => {
+  // create input row
+  const newRow = document.createElement("div");
+  newRow.classList.add("input-row");
+
+  // create input col
+  const newInput = document.createElement("input");
+  newInput.type = "text";
+  newInput.name = "input[]";
+  // create input col
+  const newInput2 = document.createElement("input");
+  newInput2.type = "text";
+  newInput2.name = "input[]";
+
+  // create delete button
+  const removeBtn = document.createElement("button");
+  removeBtn.classList.add("remove-btn");
+  removeBtn.textContent = "x";
+
+  // listen delete button
+  removeBtn.addEventListener("click", () => {
+    newRow.remove();
+  });
+
+  // put input and delete button in input col
+  newRow.appendChild(newInput);
+  newRow.appendChild(newInput2);
+  newRow.appendChild(removeBtn);
+
+  // put input col into input container
+  inputContainer.appendChild(newRow);
+});
+</script>
