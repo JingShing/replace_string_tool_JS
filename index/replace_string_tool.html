@@ -41,7 +41,38 @@
     const outputText = document.getElementById("output-text");
   
     // listener for add button
-    addBtn.addEventListener("click", () => {
+    addBtn.addEventListener("click", add_new_input_box);
+    add_new_input_box();
+  
+    document.addEventListener("change", () =>{
+      const inputRows = document.getElementsByClassName("input-row");
+        const input = inputRows[inputRows.length-1].getElementsByTagName("input");
+        const findText = input[0].value;
+        const replaceText = input[1].value;
+        if(findText!=""&&replaceText!=""){
+          add_new_input_box();
+        }
+        change_text();
+    });
+    // listener for replace button
+    replaceBtn.addEventListener("click", change_text);
+
+    function change_text(){
+      const inputRows = document.getElementsByClassName("input-row");
+        let replacedText = inputText.value;
+        for (let i = 0; i < inputRows.length; i++) {
+        const input = inputRows[i].getElementsByTagName("input");
+        const findText = input[0].value;
+        const replaceText = input[1].value;
+        // const regex = new RegExp(findText, 'g');
+        // replacedText = replacedText.replace(regex, replaceText);
+        replacedText = replacedText.replaceAll(findText, replaceText);
+      }
+  
+      outputText.value = replacedText;
+    }
+
+    function add_new_input_box(){
       // create input row
       const newRow = document.createElement("div");
       newRow.classList.add("input-row");
@@ -82,22 +113,6 @@
   
       // put input row into input container
       inputContainer.appendChild(newRow);
-    });
-  
-    // listener for replace button
-    replaceBtn.addEventListener("click", () => {
-        const inputRows = document.getElementsByClassName("input-row");
-
-        let replacedText = inputText.value;
-        for (let i = 0; i < inputRows.length; i++) {
-        const input = inputRows[i].getElementsByTagName("input");
-        const findText = input[0].value;
-        const replaceText = input[1].value;
-        const regex = new RegExp(findText, 'g');
-        replacedText = replacedText.replace(regex, replaceText);
-      }
-  
-      outputText.value = replacedText;
-    });
+    }
   </script>
   
