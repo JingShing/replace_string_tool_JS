@@ -13,9 +13,73 @@
         margin: 5px;
         }
         Textarea {
-        width: 500px;
-        height: 200px;
+          height: 200px;
+          width: 80%;
+          max-width: 400px;
         }
+
+        /* slider switch */
+              *,
+      *:before,
+      *:after {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, ".SFNSText-Regular", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+      }
+
+      .toggle {
+        cursor: pointer;
+        display: inline-block;
+      }
+
+      .toggle-switch {
+        display: inline-block;
+        background: #ccc;
+        border-radius: 16px;
+        width: 58px;
+        height: 32px;
+        position: relative;
+        vertical-align: middle;
+        transition: 0.25s;
+      }
+      .toggle-switch:before, .toggle-switch:after {
+        content: "";
+      }
+      .toggle-switch:before {
+        display: block;
+        background: linear-gradient(to bottom, #fff 0%, #ffffff 100%);
+        border-radius: 50%;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+        width: 24px;
+        height: 24px;
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        transition: left 0.25s;
+      }
+      .toggle:hover .toggle-switch:before {
+        background: linear-gradient(to bottom, #fff 0%, #fff 100%);
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+      }
+      .toggle-checkbox:checked + .toggle-switch {
+        background: #ff0000;
+      }
+      .toggle-checkbox:checked + .toggle-switch:before {
+        left: 30px;
+      }
+
+      .toggle-checkbox {
+        position: absolute;
+        visibility: hidden;
+      }
+
+      .toggle-label {
+        margin-left: 5px;
+        position: relative;
+        top: 2px;
+      }
     </style>
 </head>
 <div>
@@ -23,7 +87,25 @@
 </div>
 <div id="input-container">
   </div>
+  <!-- add button -->
   <button id="add-btn">+</button>
+
+  <!-- slider switch -->
+  <br>
+  <label class="toggle">
+    <input class="toggle-checkbox" type="checkbox" id="regex_switch">
+    <div class="toggle-switch"></div>
+    <span class="toggle-label">Regex</span>
+  </label>
+  <br>
+  <br>
+  <label class="toggle">
+    <input class="toggle-checkbox" type="checkbox" id="once_switch" checked>
+    <div class="toggle-switch"></div>
+    <span class="toggle-label">Replace at once</span>
+  </label>
+  <br>
+  <!-- replace button -->
   <button id="replace-btn">Replace</button>
   <p>original paragraph:</p>
   <br>
@@ -58,6 +140,27 @@
     replaceBtn.addEventListener("click", change_text);
 
     function change_text(){
+      let re_check = document.getElementById("regex_switch").checked;
+      let once_check = document.getElementById("once_switch").checked;
+      if (once_check)change_text_at_once();
+      else if(re_check)change_text_oreder_re();
+      else change_text_oreder();
+    }
+
+    function change_text_oreder_re(){
+      const inputRows = document.getElementsByClassName("input-row");
+        let replacedText = inputText.value;
+        for (let i = 0; i < inputRows.length; i++) {
+        const input = inputRows[i].getElementsByTagName("input");
+        const findText = input[0].value;
+        const replaceText = input[1].value;
+        const regex = new RegExp(findText, 'g');
+        replacedText = replacedText.replace(regex, replaceText);
+      }
+  
+      outputText.value = replacedText;
+    }
+    function change_text_oreder(){
       const inputRows = document.getElementsByClassName("input-row");
         let replacedText = inputText.value;
         for (let i = 0; i < inputRows.length; i++) {
@@ -71,7 +174,33 @@
   
       outputText.value = replacedText;
     }
+    function change_text_at_once(){
+      const inputRows = document.getElementsByClassName("input-row");
+      let finds = [];
+      let replaces = [];
+      let unknowns = [];
+      let len = inputRows.length;
+      for (let i = 0; i < len; i++) {
+        const input = inputRows[i].getElementsByTagName("input");
+        const findText = input[0].value;
+        const replaceText = input[1].value;
+        finds.push(findText);
+        replaces.push(replaceText);
+      }
+      console.log(finds);
+      console.log(replaces);
 
+      const replacements = {};
+      for (let i = 0; i < finds.length && i < replaces.length; i++) {
+        const currentWord = finds[i];
+        const nextWord = replaces[i];
+        replacements[currentWord] = nextWord;
+      }
+      const originalText = inputText.value;
+      const replacedText = originalText.replace(new RegExp(Object.keys(replacements).join('|'), 'g'), match => replacements[match]);
+
+      outputText.value = replacedText;
+    }
     function add_new_input_box(){
       // create input row
       const newRow = document.createElement("div");
