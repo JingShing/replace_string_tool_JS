@@ -82,9 +82,21 @@
       }
     </style>
 </head>
-<div>
+<p>
   You need to click "+" first. It will display a and b two input. And if you click replace it will replace a with b.
-</div>
+</p>
+<p>
+  Regex will using regex to replace.
+</p>
+<p>
+  Replace at once will do the replace at once:<br>
+  (this method also use regex)<br>
+  input: ABC<br>
+  A -> B<br>
+  B -> C<br>
+  C -> A<br>
+  output: BCA (not active will be AAA)<br>
+</p>
 <div id="input-container">
   </div>
   <!-- add button -->
@@ -97,7 +109,6 @@
     <div class="toggle-switch"></div>
     <span class="toggle-label">Regex</span>
   </label>
-  <br>
   <br>
   <label class="toggle">
     <input class="toggle-checkbox" type="checkbox" id="once_switch" checked>
@@ -219,9 +230,9 @@
       newInput2.id = "input2";
   
       const label1 = document.createElement("span");
-      label1.textContent = "a:";
+      label1.textContent = "a: ";
       const label2 = document.createElement("span");
-      label2.textContent = "  b:";
+      label2.textContent = "  b: ";
 
       // create delete button
       const removeBtn = document.createElement("button");
